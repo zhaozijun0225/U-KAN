@@ -1,5 +1,7 @@
 import argparse
 import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+# python train.py --arch UKAN --dataset PL --input_w 416 --input_h 416 --name PL_UKAN  --data_dir ./inputs
 from collections import OrderedDict
 from glob import glob
 import random
@@ -71,9 +73,9 @@ def parse_args():
                         help='input channels')
     parser.add_argument('--num_classes', default=1, type=int,
                         help='number of classes')
-    parser.add_argument('--input_w', default=256, type=int,
+    parser.add_argument('--input_w', default=416, type=int,
                         help='image width')
-    parser.add_argument('--input_h', default=256, type=int,
+    parser.add_argument('--input_h', default=416, type=int,
                         help='image height')
     parser.add_argument('--input_list', type=list_type, default=[128, 160, 256])
 
@@ -282,7 +284,7 @@ def main():
 
     kan_fc_params = []
     other_params = []
-
+    params=None
     for name, param in model.named_parameters():
         # print(name, "=>", param.shape)
         if 'layer' in name.lower() and 'fc' in name.lower(): # higher lr for kan layers
